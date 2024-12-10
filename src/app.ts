@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import express, { NextFunction, Request, Response } from "express";
 import userRoutes from "./routes/user.routes.js";
 import ordersRoutes from "./routes/orders.routes.js";
@@ -50,3 +51,13 @@ app.use(errorMiddleware);
 app.listen(process.env.PORT, () => {
   console.log(`server work ${process.env.PORT}`);
 });
+=======
+import  express from "express";
+
+const app= express();
+
+
+app.listen("3000",()=>{
+    console.log("Server is running on port 5000");  
+});
+>>>>>>> e96c7b35ec48a0d15a87ddcaac069ef90fe472a0

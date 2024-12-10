@@ -1,4 +1,5 @@
 import express from "express";
+<<<<<<< HEAD
 import userRoutes from "./routes/user.routes.js";
 import ordersRoutes from "./routes/orders.routes.js";
 import productsRoutes from "./routes/products.routes.js";
@@ -36,4 +37,9 @@ app.use("/uploads", express.static("uploads"));
 app.use(errorMiddleware);
 app.listen(process.env.PORT, () => {
     console.log(`server work ${process.env.PORT}`);
+=======
+const app = express();
+app.listen("3000", () => {
+    console.log("Server is running on port 5000"); // Start the server on port 5000
+>>>>>>> e96c7b35ec48a0d15a87ddcaac069ef90fe472a0
 });

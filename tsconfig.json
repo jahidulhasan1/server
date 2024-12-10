@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+<<<<<<< HEAD
     "target": "ES2020",                // Set the target ECMAScript version
     "module": "NodeNext",   
                  // Use ESNext for module resolution
@@ -13,4 +14,16 @@
   },
   "include": ["src/**/*.ts"],          // Include all TypeScript files in src
   "exclude": ["node_modules", "dist"]  // Exclude node_modules and dist
+=======
+    "target": "ES2020",
+
+    "module": "NodeNext",
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "moduleResolution": "NodeNext",
+
+    "strict": true
+    
+  }
+>>>>>>> e96c7b35ec48a0d15a87ddcaac069ef90fe472a0
 }
