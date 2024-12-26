@@ -10,7 +10,6 @@ import {
 } from "../controllers/products.controllers.js";
 import { adminOnly } from "./../middleware/auth.js";
 import { singleUpload } from "../middleware/multer.js";
-import { singleUpload } from "./../../dist/middleware/multer";
 
 const app = express.Router();
 

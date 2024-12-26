@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import { userController } from "../types/types.js";
-import { myCache } from "./../../dist/app";
 
 const errorMiddleware = (
   err: any,

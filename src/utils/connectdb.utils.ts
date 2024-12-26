@@ -6,6 +6,7 @@ export const connectDB = async (uri:string) => {
       dbName: "Ecommerce_24",
      
     });
+   console.log("connected");
    
   } catch (error) {
     console.error("DB Connection Error:", error);

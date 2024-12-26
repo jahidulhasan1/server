@@ -1,7 +1,7 @@
 import { tryCatch } from "../middleware/errorMiddleware.js";
 import { Coupon } from "../models/cupon.schema.js";
 import { ErrorHandler } from "../utils/utils.class.js";
-export const mewCoupon = tryCatch(async (req, res, next) => {
+export const newCoupon = tryCatch(async (req, res, next) => {
     const { coupon, amount } = req.body;
     if (!coupon || !amount)
         return next(new ErrorHandler("enter feilds", 400));
@@ -24,10 +24,22 @@ export const getDiscount = tryCatch(async (req, res, next) => {
         discount: discount.amount,
     });
 });
-export const getAllDiscount = tryCatch(async (req, res, next) => {
+export const getAllCoupon = tryCatch(async (req, res, next) => {
     const coupons = await Coupon.find({});
     return res.status(200).json({
         success: true,
         coupons,
+    });
+});
+export const deleteDiscount = tryCatch(async (req, res, next) => {
+    const { id } = req.params;
+    const coupon = await Coupon.findById(id);
+    if (!coupon) {
+        return next(new ErrorHandler("Product not found", 404));
+    }
+    await Coupon.deleteOne();
+    return res.status(200).json({
+        success: true,
+        message: "coupon deleted successfully",
     });
 });

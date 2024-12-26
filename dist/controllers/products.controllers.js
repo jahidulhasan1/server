@@ -81,6 +81,7 @@ export const newProduct = tryCatch(async (req, res, next) => {
         });
         return next(new ErrorHandler("add empty failed", 400));
     }
+    console.log(name, stock, price, category);
     await Product.create({
         name,
         stock,

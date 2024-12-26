@@ -4,6 +4,7 @@ export const connectDB = async (uri) => {
         await mongoose.connect(uri, {
             dbName: "Ecommerce_24",
         });
+        console.log("connected");
     }
     catch (error) {
         console.error("DB Connection Error:", error);

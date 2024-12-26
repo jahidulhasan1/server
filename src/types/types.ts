@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { clearScreenDown } from "readline";
 
 export type newUserDataType = {
   name: string;
@@ -19,7 +18,7 @@ export type newProductDataType = {
 };
 export type userController = (
   req: Request<any>,
-  res: Response,
+  res: Response ,
   next: NextFunction
 ) => Promise<void | Response<any, Record<string, any>>>;
 
