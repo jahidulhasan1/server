@@ -77,7 +77,7 @@ export const getCategory = async ({ categories, productsCount, }) => {
     });
     return categoriesCount;
 };
-export const getChartData = ({ length, docArr }) => {
+export const getChartData = ({ length, docArr, property }) => {
     const data = new Array(length).fill(0);
     const today = new Date();
     //  const lastSixMonthsOrder =lastSixMonthOrders.length
@@ -85,7 +85,12 @@ export const getChartData = ({ length, docArr }) => {
         const creationDate = i.createdAt;
         const monthsDiff = (today.getMonth() - creationDate.getMonth() + 12) % 12;
         if (monthsDiff < length) {
-            data[length - monthsDiff - 1] += 1;
+            if (property) {
+                data[length - monthsDiff - 1] += i[property];
+            }
+            else {
+                data[length - monthsDiff - 1] += 1;
+            }
         }
     });
     return data;

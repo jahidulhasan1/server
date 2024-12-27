@@ -118,14 +118,19 @@ export const getCategory = async ({
   return categoriesCount;
 };
 
+// interface MyDocument extends Document {
+//   createdAt: Date;
+//   discount?: number;
+//   total?: number;
+// }
+
 type chartDataProps = {
   length: number;
-  docArr: (Document & { createdAt: Date })[];
-
- 
+  docArr: (Document & { createdAt: Date; discount?: number; total?: number })[];
+  property?: "discount" | "total";
 };
 
-export const getChartData = ({ length, docArr }: chartDataProps) => {
+export const getChartData = ({ length, docArr, property }: chartDataProps) => {
   const data: number[] = new Array(length).fill(0);
   const today = new Date();
   //  const lastSixMonthsOrder =lastSixMonthOrders.length
@@ -133,7 +138,11 @@ export const getChartData = ({ length, docArr }: chartDataProps) => {
     const creationDate = i.createdAt;
     const monthsDiff = (today.getMonth() - creationDate.getMonth() + 12) % 12;
     if (monthsDiff < length) {
-      data[length - monthsDiff - 1] += 1;
+      if (property) {
+        data[length - monthsDiff - 1] += i[property]!;
+      } else {
+        data[length - monthsDiff - 1] += 1;
+      }
     }
   });
   return data;
