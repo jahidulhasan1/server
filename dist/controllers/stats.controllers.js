@@ -258,7 +258,11 @@ export const getBarCharts = tryCatch(async (req, res, next) => {
         const productCounts = getChartData({ length: 6, docArr: products });
         const usersCounts = getChartData({ length: 6, docArr: users });
         const ordersCounts = getChartData({ length: 12, docArr: orders });
-        charts = { productCounts, usersCounts, ordersCounts };
+        charts = {
+            products: productCounts,
+            users: usersCounts,
+            orders: ordersCounts,
+        };
         myCache.set("admin-bar-charts", JSON.stringify(charts));
     }
     res.status(200).json({

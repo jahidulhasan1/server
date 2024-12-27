@@ -8,7 +8,7 @@
     "start": "node dist/app.js",
     "build": "tsc",
     "watch": "tsc -w",
-     "dev": "nodemon --watch tsc-w './src/**/*.ts' --exec node dist/app.js"
+    "dev": "nodemon --watch tsc-w './src/**/*.ts' --exec node dist/app.js"
   },
   "author": "",
   "license": "ISC",
@@ -21,6 +21,7 @@
     "mongoose": "^8.8.2",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
+    "stripe": "^17.5.0",
     "uuid": "^11.0.3",
     "validator": "^13.12.0"
   },

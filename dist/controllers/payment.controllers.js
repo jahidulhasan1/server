@@ -1,6 +1,27 @@
+import { stripe } from "../app.js";
 import { tryCatch } from "../middleware/errorMiddleware.js";
 import { Coupon } from "../models/cupon.schema.js";
 import { ErrorHandler } from "../utils/utils.class.js";
+export const createPaymentIntent = tryCatch(async (req, res, next) => {
+    const { amount } = req.body;
+    console.log(amount);
+    console.log();
+    if (isNaN(amount) || amount <= 0) {
+        return res.status(400).json({
+            success: false,
+            message: "Invalid amount provided",
+        });
+    }
+    const paymentIntent = await stripe.paymentIntents.create({
+        amount: Number(amount) * 100,
+        currency: "USD",
+    });
+    return res.status(200).json({
+        success: true,
+        client_secret: paymentIntent.client_secret,
+        amount
+    });
+});
 export const newCoupon = tryCatch(async (req, res, next) => {
     const { coupon, amount } = req.body;
     if (!coupon || !amount)

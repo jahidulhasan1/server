@@ -10,9 +10,11 @@ import errorMiddleware from "./middleware/errorMiddleware.js";
 import NodeCache from "node-cache";
 import { config } from "dotenv";
 import morgan from "morgan";
+import Stripe from "stripe";
 config({
     path: ".env",
 });
+export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 connectDB(process.env.MONGOURI);
 const PORT = process.env.PORT ?? 5005;
 const app = express();
