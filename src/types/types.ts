@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from "express";
 export type newUserDataType = {
   name: string;
   email: string;
+  password:string,
   photo: string;
   dob: Date;
   gender: string;

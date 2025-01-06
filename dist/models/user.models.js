@@ -1,10 +1,7 @@
 import mongoose from "mongoose";
 import validator from "validator";
+import bcrypt from "bcrypt";
 const userSchema = new mongoose.Schema({
-    _id: {
-        type: String,
-        required: [true, "Please enter ID"],
-    },
     name: {
         type: String,
         required: [true, "Please enter Name"],
@@ -15,9 +12,13 @@ const userSchema = new mongoose.Schema({
         required: [true, "Please enter Name"],
         validate: validator.default.isEmail,
     },
-    photo: {
+    password: {
         type: String,
-        required: [true, "Please add Photo"],
+        required: [true, "Please enter password"],
+    },
+    photo: {
+        public_id: { type: String, default: "" },
+        url: { type: String, default: "" },
     },
     role: {
         type: String,
@@ -46,4 +47,17 @@ userSchema.virtual("age").get(function () {
     }
     return age;
 });
+// after adding user data in db hash the pass
+userSchema.pre("save", async function (next) {
+    // do stuff
+    if (!this.isModified("password")) {
+        // hash the password
+        next();
+    }
+    this.password = await bcrypt.hash(this.password, 12);
+    next();
+});
+userSchema.methods.comparePass = async function (enteredPass) {
+    return await bcrypt.compare(enteredPass, this.password);
+};
 export const User = mongoose.model("User", userSchema);

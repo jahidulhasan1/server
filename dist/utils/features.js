@@ -1,5 +1,6 @@
 import { myCache } from "../app.js";
 import { Order } from "../models/orders.schema.js";
+import { v2 as cloudinary } from 'cloudinary';
 import { Product } from "./../models/products.models.js";
 // export const invalidateCache = async (
 //   data: object,
@@ -94,4 +95,13 @@ export const getChartData = ({ length, docArr, property }) => {
         }
     });
     return data;
+};
+export const uploadUserProfile = async (filePath) => {
+    const cloudinaryResponse = await cloudinary.uploader.upload(filePath, {
+        folder: "userProfile", // Optional: specify a folder in Cloudinary
+    });
+    return {
+        public_id: cloudinaryResponse.public_id,
+        url: cloudinaryResponse.url,
+    };
 };
