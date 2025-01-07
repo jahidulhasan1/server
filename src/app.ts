@@ -7,12 +7,14 @@ import paymentRoutes from "./routes/payment.routes.js";
 import statsRoutes from "./routes/stats.routes.js";
 import { connectDB } from "./utils/connectdb.utils.js";
 import cookieParser from "cookie-parser";
-import errorMiddleware from "./middleware/errorMiddleware.js";
+import errorMiddleware, { tryCatch } from "./middleware/errorMiddleware.js";
 import NodeCache from "node-cache";
 import { config } from "dotenv";
 import morgan from "morgan";
 import Stripe from "stripe";
 import { v2 as cloudinary } from 'cloudinary';
+import { ErrorHandler } from "./utils/utils.class.js";
+import jwt  from "jsonwebtoken";
 config({
   path: ".env",
 });
@@ -24,6 +26,16 @@ const app = express();
 
 export const myCache = new NodeCache();
 // middleware
+
+
+
+
+
+ 
+
+
+
+
 
 app.use(cookieParser());
 app.use(express.json());

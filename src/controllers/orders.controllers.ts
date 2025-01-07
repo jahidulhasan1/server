@@ -104,7 +104,7 @@ export const newOrder = tryCatch(
       order: true,
       admin: true,
       userId: user,
-      productId:order.orderItems.map((i) => String(i.productId)),
+      productId: order.orderItems.map((i) => String(i.productId)),
     });
 
     // Respond with success message
@@ -145,7 +145,7 @@ export const processOrder = tryCatch(
       product: false,
       order: true,
       admin: true,
-      userId: order.user,
+      userId: order.user.toString(),
       orderId: String(order._id),
     });
 
@@ -175,7 +175,7 @@ export const deleteOrder = tryCatch(
       product: false,
       order: true,
       admin: true,
-      userId: order.user,
+      userId: order.user.toString(),
       orderId: String(order._id),
     });
 

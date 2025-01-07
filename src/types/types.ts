@@ -1,14 +1,50 @@
 import { NextFunction, Request, Response } from "express";
+import mongoose from "mongoose";
 
-export type newUserDataType = {
+
+
+// usermodel
+export interface IUser extends Document {
+ 
   name: string;
   email: string;
-  password:string,
+  photo:{
+    public_id: string;
+    url: string;
+  };
+  password: string;
+  role: "admin" | "user";
+  gender: "male" | "female";
+  dob: Date;
+  createdAt: Date;
+  updatedAt: Date;
+  
+  // Virtual Attribute
+  age: number;
+  comparePass(candidatePassword: string, userPassword: string): Promise<boolean>;
+}
+
+
+
+
+
+
+
+export type newUserDataType = {
+  _id: mongoose.Types.ObjectId;
+  name: string;
+  email: string;
+  password: string | undefined;
   photo: string;
   dob: Date;
+  role:string;
   gender: string;
-  _id: string;
 };
+export type loggedUserData ={
+  name:string;
+  email:string
+  password:string|undefined;
+}
 
 export type newProductDataType = {
   name: string;
@@ -19,9 +55,9 @@ export type newProductDataType = {
 };
 export type userController = (
   req: Request<any>,
-  res: Response ,
+  res: Response,
   next: NextFunction
-) => Promise<void | Response<any, Record<string, any>>>;
+) => Promise<void | Response<any, Record<string, any>> >;
 
 export type searchRequestQuery = {
   search?: string;

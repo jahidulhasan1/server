@@ -3,14 +3,21 @@ import {
   deleteUser,
   getAllUser,
   getSingleUser,
+  login,
+  logout,
   newUser,
 } from "../controllers/user.controllers.js";
-import { adminOnly } from "../middleware/auth.js";
+import { adminOnly, isAthenticated } from "../middleware/auth.js";
 import { singleUserProfUpload } from "../middleware/multer.js";
 
 const app = express.Router();
 
 app.post("/new", singleUserProfUpload, newUser);
-app.get("/getall", adminOnly, getAllUser);
-app.route("/:id").get(getSingleUser).delete(adminOnly, deleteUser);
+app.post("/login", login);
+app.post("/logout", isAthenticated, logout);
+app.get("/getall", isAthenticated, adminOnly, getAllUser);
+app
+  .route("/:id")
+  .get(getSingleUser)
+  .delete(isAthenticated, adminOnly, deleteUser);
 export default app;

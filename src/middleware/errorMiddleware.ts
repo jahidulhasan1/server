@@ -14,10 +14,12 @@ const errorMiddleware = (
   return res.status(500).json({ error: err.message });
 };
 
-export const tryCatch =
+export const tryCatch= (func: userController) => (req: Request, res: Response, next: NextFunction) =>  
   (func: userController) =>
   (req: Request, res: Response, next: NextFunction) => {
     return Promise.resolve(func(req, res, next)).catch(next);
   };
+
+
 
 export default errorMiddleware;

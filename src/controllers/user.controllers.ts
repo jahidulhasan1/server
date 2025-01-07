@@ -1,70 +1,57 @@
 import { NextFunction, Request, Response } from "express";
-import { User } from "../models/user.models.js";
-import { newUserDataType } from "../types/types.js";
+import { User, UserModel } from "../models/user.models.js";
+import { newUserDataType, loggedUserData } from "../types/types.js";
 import { tryCatch } from "../middleware/errorMiddleware.js";
 import { ErrorHandler } from "../utils/utils.class.js";
 import { rm } from "fs";
 import { uploadUserProfile } from "../utils/features.js";
+import { sendToken } from "../utils/sendToken.js";
 
-// export const newUser = tryCatch(
-//   async (
-//     req: Request<{}, {}, newUserDataType>,
-//     res: Response,
-//     next: NextFunction
-//   ) => {
-//     const { name, email, dob, gender, password } = req.body;
-//     const photo = req.file;
-//     if (!photo) {
-//       return next(new ErrorHandler("photo required", 400));
-//     }
+export const login = tryCatch(
+  async (
+    req: Request<{}, {}, loggedUserData>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const { email, password } = req.body;
 
-//     if (!name || !email || !gender || !dob || !password) {
-//       rm(photo.path, () => {
-//         console.log("Photo deleted");
-//       });
+    // Check if email and password are provided
+    if (!email || !password) {
+      return next(new ErrorHandler("All fields are required", 400));
+    }
 
-//       return next(new ErrorHandler("add empty failed", 400));
-//     }
+    // Find the user by email
+    const user = (await User.findOne({ email })) as UserModel;
 
-//     if (!name || !email || !photo || !dob  || !gender || !password)
-//       next(new ErrorHandler("add all required felids ", 400));
+    // Check if user exists
+    if (!user) {
+      return next(new ErrorHandler("Invalid credentials", 401));
+    }
 
-//     let user = await User.findOne({email});
+    // Compare the entered password with the stored password
+    const isMatch = await user.comparePass(password, user.password);
+    if (!isMatch) {
+      return next(new ErrorHandler("Invalid credentials", 401));
+    }
 
-//     if (user){
-//       rm(photo.path, () => {
-//         console.log("Photo deleted");
-//       });
-//       return res.status(400).json({
-//         success: false,
-//         message: "this Email has taken,Try new Email",
-//       });}
-//       console.log(req.file);
+    // Send token and respond to the client
+    sendToken(user, res, 200, "Logged in successfully");
+  }
+);
+export const logout = tryCatch(
+  async (req: Request, res: Response, next: NextFunction) => {
+    res.cookie("token", null, {
+      expires: new Date(Date.now()), // Expire the cookie immediately
+      httpOnly: true,
+      sameSite: "strict",
+    });
 
-//       console.log(photo);
-
-// console.log(photo.path);
-
-// const profilePhotoUrl = await uploadUserProfile(photo.path);
-//     console.log(profilePhotoUrl);
-
-//     await User.create({
-
-//       name,
-//       email,
-//       password,
-//       photo: profilePhotoUrl,
-//       role: "user",
-//       gender,
-//       dob: new Date(dob),
-//     });
-
-//     return res.status(201).json({
-//       success: true,
-//       message: "User created successfully",
-//     });
-//   }
-// );
+    res.status(200).json({
+      success: true,
+      message: "Logged out successfully",
+    });
+  }
+);
 
 export const newUser = tryCatch(
   async (
@@ -94,10 +81,9 @@ export const newUser = tryCatch(
       rm(photo.path, () => {
         console.log("Photo deleted due to existing user");
       });
-      return res.status(400).json({
-        success: false,
-        message: "This email is already taken. Try a new email.",
-      });
+      return next(
+        new ErrorHandler("This email is already taken. Try a new email.", 400)
+      );
     }
 
     try {
@@ -105,7 +91,7 @@ export const newUser = tryCatch(
       const profilePhotoUrl = await uploadUserProfile(photo.path);
 
       // Create a new user
-      await User.create({
+      const user: UserModel = await User.create({
         name,
         email,
         password,
@@ -115,10 +101,11 @@ export const newUser = tryCatch(
         dob: new Date(dob),
       });
 
-      return res.status(201).json({
-        success: true,
-        message: "User created successfully",
-      });
+      // return res.status(200).json({
+      //   success: true,
+      //   message: "User created successfully",
+      // });
+      sendToken(user, res, 200, "Registered successfully");
     } catch (error) {
       // Handle any error during upload or user creation
       console.error("Error occurred:", error);

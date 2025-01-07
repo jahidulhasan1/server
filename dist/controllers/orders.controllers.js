@@ -110,7 +110,7 @@ export const processOrder = tryCatch(async (req, res, next) => {
         product: false,
         order: true,
         admin: true,
-        userId: order.user,
+        userId: order.user.toString(),
         orderId: String(order._id),
     });
     // Respond with success message
@@ -131,7 +131,7 @@ export const deleteOrder = tryCatch(async (req, res, next) => {
         product: false,
         order: true,
         admin: true,
-        userId: order.user,
+        userId: order.user.toString(),
         orderId: String(order._id),
     });
     // Respond with success message
